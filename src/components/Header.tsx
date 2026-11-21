@@ -40,11 +40,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenAppModal }) => {
           : 'bg-transparent border-b border-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 relative flex items-center justify-end lg:justify-between gap-8">
         {/* Zone 1: Brand logo */}
         <a
           href="#top"
-          className="inline-flex items-center text-slate-100 hover:text-white transition-opacity opacity-95 hover:opacity-100 whitespace-nowrap shrink-0"
+          className="max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2 inline-flex items-center text-slate-100 hover:text-white transition-opacity opacity-95 hover:opacity-100 whitespace-nowrap shrink-0"
           aria-label={`${SEA_CONFIG.name} — ${SEA_CONFIG.fullName}`}
         >
           <img

@@ -1,11 +1,89 @@
-<div align="center">
+# SEA — Social Engineering Association
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+**Слоган:** SEA — Море возможностей для вас и ваших близких.
 
-  <h1>Built with AI Studio</h2>
+Автономный статический Web3-портал сообщества **SEA (Social Engineering Association)**, подготовленный для публикации в **IPFS** и привязки к **Unstoppable Domains**.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Особенности архитектуры
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+- **100% статическая клиентская сборка**: без SSR, без серверных API, без баз данных в продакшене.
+- **Относительные пути (`base: './'`)**: корректно открывается как из корня домена, так и через подпапки IPFS-шлюзов (`/ipfs/<CID>/`).
+- **Полная автономность ресурсов**: все шрифты (`@fontsource/manrope`, `@fontsource/ibm-plex-sans`, `@fontsource/ibm-plex-mono`), локальные SVG-иконки и изображения встраиваются в папку `dist/` без внешних CDN.
+- **Централизованная конфигурация**: все ссылки, Web3-домен, адрес смарт-контракта, статусы Roadmap и соцсети задаются в одном файле `src/config.ts`.
 
-</div>
+---
+
+## 1. Настройка конфигурации
+
+Перед сборкой отредактируйте `src/config.ts`:
+
+- `appUrl` — URL основного приложения / DApp (например, `https://app.example.com`).
+- `communityUrl` — ссылка на основной портал или канал сообщества для CTA «Присоединиться к сообществу».
+- `web3Domain` — ваш домен Unstoppable Domains (например, `sea-association.x`).
+- `contractAddress` и `showContractAddress` — при необходимости укажите адрес смарт-контракта и переключите `showContractAddress: true`.
+- `socialLinks` — ссылки на официальные каналы (`telegram`, `vk`, `youtube`, `instagram`) и поведение при пустых ссылках (`socialEmptyBehavior: 'soon' | 'hide'`).
+- `roadmapStatus` и `ecosystemStatus` — актуальные статусы этапов и модулей.
+
+---
+
+## 2. Локальный запуск
+
+```bash
+npm install
+npm run dev
+```
+
+Сервер разработки запустится на `http://localhost:3000`.
+
+---
+
+## 3. Сборка статического сайта (`dist/`)
+
+```bash
+npm run lint
+npm run build
+```
+
+После выполнения команды готовые статические файлы появятся в каталоге `dist/`.
+
+### Проверка на отсутствие абсолютных путей
+
+```bash
+grep -rnE '(src|href)="/' dist/index.html
+```
+
+Команда не должна возвращать совпадений — все ресурсы в `dist/index.html` подключаются через `./`.
+
+### Локальная проверка работы из подпапки (имитация IPFS-шлюза)
+
+```bash
+npx vite preview --port 4173
+```
+
+Или скопируйте содержимое `dist/` в подкаталог `test-root/ipfs/demo/` и откройте в браузере через локальный статический сервер по пути `/ipfs/demo/`.
+
+---
+
+## 4. Публикация в IPFS
+
+1. Соберите проект: `npm run build`.
+2. Загрузите **содержимое папки `dist/`** (так, чтобы `index.html` находился в корне загружаемой директории):
+   - **Через IPFS CLI (Kubo):**
+     ```bash
+     ipfs add -r -Q dist/
+     ```
+     Команда вернёт корневой `CID` (например, `bafybeig...`).
+   - **Через IPFS Desktop / Pinata / Web3.Storage / 4EVERLAND:**
+     Загрузите папку `dist/` целиком как директорию и закрепите (pin) полученный `CID`.
+3. Проверьте доступность через публичный шлюз:
+   `https://ipfs.io/ipfs/<ВАШ_CID>/` или `https://<ВАШ_CID>.ipfs.dweb.link/`.
+
+---
+
+## 5. Привязка Unstoppable Domain
+
+1. Откройте панель управления вашим доменом на сайте **Unstoppable Domains** (`My Domains` → выберите домен → `Manage`).
+2. Перейдите в раздел **Website** (или **Manage → Website → Link IPFS**).
+3. Вставьте полученный **IPFS Hash (`CID`)** папки `dist/`.
+4. Подтвердите транзакцию обновления записей домена в кошельке.
+5. После синхронизации портал станет доступен по вашему Web3-домену в поддерживаемых браузерах и через Web3-резолверы.

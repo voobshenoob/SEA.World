@@ -1,0 +1,6 @@
+{
+  "name": "SEA — Social Engineering Association",
+  "description": "SEA — экосистема сотрудничества людей, знаний, технологий и инициатив для решения социальных проблем и создания новых возможностей.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
